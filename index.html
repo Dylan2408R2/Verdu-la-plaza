@@ -2,99 +2,85 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>La Plaza - Verdulería Online</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <title>La Plaza - Verdulería online</title>
+  <link rel="icon" href="logo.png" type="image/png">
   <style>
-    * {
-      box-sizing: border-box;
-    }
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #e8f5e9, #f1f8e9);
       margin: 0;
       padding: 0;
-      background: #f0fdf4;
-      color: #333;
-      display: flex;
-      justify-content: center;
-      padding: 40px 20px;
     }
-    .container {
+
+    .box {
       background: white;
-      max-width: 600px;
-      width: 100%;
-      border-radius: 16px;
+      margin: 40px auto;
       padding: 30px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      border-radius: 20px;
+      box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+      max-width: 700px;
     }
-    h1 {
-      color: #43a047;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    h2 {
+
+    h1, h2, h3 {
       color: #2e7d32;
-      margin-top: 30px;
-      font-size: 20px;
     }
-    label {
-      font-weight: 500;
-    }
+
     input, button {
       padding: 10px;
-      margin: 8px 0;
+      margin: 5px 0;
       font-size: 16px;
+      width: 100%;
+      box-sizing: border-box;
       border: 1px solid #ccc;
       border-radius: 8px;
-      width: 100%;
     }
-    input:focus {
-      outline: none;
-      border-color: #81c784;
-      box-shadow: 0 0 0 2px rgba(129,199,132,0.3);
-    }
+
     button {
-      background: #66bb6a;
+      background-color: #66bb6a;
       color: white;
-      font-weight: 600;
+      border: none;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background-color 0.3s ease;
     }
+
     button:hover {
-      background: #4caf50;
+      background-color: #4caf50;
     }
-    .juego {
-      background: #e8f5e9;
-      padding: 16px;
-      border-radius: 12px;
-      margin-top: 15px;
-      border: 1px solid #c8e6c9;
-    }
-    .juego button {
-      margin-top: 10px;
-    }
+
     ul {
-      list-style-type: none;
-      padding-left: 0;
-      margin: 0;
-      margin-top: 10px;
+      padding-left: 20px;
     }
-    li {
-      background: #f1f8e9;
-      padding: 8px 12px;
-      margin-bottom: 6px;
-      border-radius: 8px;
+
+    .juego {
+      background: #f9fbe7;
+      padding: 15px;
+      margin: 15px 0;
+      border: 2px dashed #c5e1a5;
+      border-radius: 10px;
     }
-    #contadorClics {
+
+    .campo {
+      margin-bottom: 15px;
+    }
+
+    .campo label {
       font-weight: bold;
-      margin-top: 8px;
+      display: block;
+      margin-bottom: 5px;
     }
+
+    .contador {
+      font-weight: bold;
+    }
+
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="box">
     <h1>🥬 Verdulería "La Plaza"</h1>
 
     <h2>🎮 Juegos de Descuento</h2>
+
     <div class="juego">
       <p><strong>Adivina el número (10%):</strong></p>
       <button onclick="jugarAdivina()">Jugar</button>
@@ -108,30 +94,35 @@
     <div class="juego">
       <p><strong>Haz clic 5 veces en 3 segundos (20%):</strong></p>
       <button onclick="iniciarClic()">Jugar</button>
-      <p id="contadorClics">Clics: 0</p>
+      <p class="contador" id="contadorClics">Clics: 0</p>
     </div>
 
-    <h2>🛒 Agregá tus productos al pedido:</h2>
-    <label>Producto:</label>
-    <input type="text" id="producto" placeholder="Ej: Manzana">
+    <h2>🛍️ Agregá tus productos:</h2>
 
-    <label>Cantidad:</label>
-    <input type="number" id="cantidad" value="1" min="1">
+    <div class="campo">
+      <label for="producto">Producto:</label>
+      <input type="text" id="producto" placeholder="Ej: Manzana">
+    </div>
+
+    <div class="campo">
+      <label for="cantidad">Cantidad:</label>
+      <input type="number" id="cantidad" value="1" min="1">
+    </div>
 
     <button onclick="agregarProducto()">Agregar al pedido</button>
 
-    <h2>🧾 Tu pedido actual:</h2>
+    <h3>🧾 Tu pedido actual:</h3>
     <ul id="lista-pedidos"></ul>
 
-    <button onclick="enviarPedido()">📩 Enviar Pedido</button>
+    <button onclick="enviarPedido()">📤 Enviar Pedido</button>
   </div>
 
-  <!-- Formulario oculto para FormSubmit -->
-  <form id="formularioPedido" action="https://formsubmit.co/yaninaadz%40gmail.com" method="POST" style="display: none;">
-    <input type="hidden" name="nombre" id="input-nombre">
-    <input type="hidden" name="ubicacion" id="input-ubicacion">
-    <input type="hidden" name="pedido" id="input-pedido">
-    <input type="hidden" name="descuento" id="input-descuento">
+  <form id="formularioEnvio" action="https://formsubmit.co/tucorreo@gmail.com" method="POST" style="display: none;">
+    <input type="hidden" name="pedido">
+    <input type="hidden" name="nombre">
+    <input type="hidden" name="ubicacion">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_template" value="table">
   </form>
 
   <script>
@@ -163,27 +154,30 @@
       }
 
       const nombre = prompt("📛 ¿Cuál es tu nombre?");
-      const ubicacion = prompt("📍 ¿Dónde lo llevamos? (ubicación)");
+      if (!nombre) return;
 
-      if (!nombre || !ubicacion) {
-        alert("Faltan datos. No se puede enviar el pedido.");
-        return;
-      }
+      const ubicacion = prompt("📍 ¿Cuál es tu ubicación?");
+      if (!ubicacion) return;
 
       let resumen = "";
       pedidos.forEach(p => {
         resumen += `- ${p.cantidad} x ${p.producto}\n`;
       });
 
-      document.getElementById("input-nombre").value = nombre;
-      document.getElementById("input-ubicacion").value = ubicacion;
-      document.getElementById("input-pedido").value = resumen;
-      document.getElementById("input-descuento").value = descuentoTotal + "%";
+      if (descuentoTotal > 0) {
+        resumen += `\nDescuento aplicado: ${descuentoTotal}%`;
+      }
 
-      document.getElementById("formularioPedido").submit();
+      alert(`🧾 Tu pedido:\n${resumen}\n\n✅ ¡Pedido enviado correctamente!`);
 
-      alert("✅ ¡Pedido enviado!");
+      // Enviar con FormSubmit
+      const form = document.getElementById("formularioEnvio");
+      form.pedido.value = resumen;
+      form.nombre.value = nombre;
+      form.ubicacion.value = ubicacion;
+      form.submit();
 
+      // Limpiar
       pedidos.length = 0;
       document.getElementById("lista-pedidos").innerHTML = "";
       descuentoTotal = 0;
@@ -220,19 +214,22 @@
     function iniciarClic() {
       clics = 0;
       document.getElementById("contadorClics").textContent = "Clics: 0";
-      tiempoRestante = 3;
 
       clearInterval(intervalo);
+      tiempoRestante = 3;
+
       intervalo = setInterval(() => {
         tiempoRestante--;
         if (tiempoRestante <= 0) {
           clearInterval(intervalo);
+
           if (clics >= 5) {
             alert("💨 ¡Rápido! Ganaste 20% de descuento.");
             descuentoTotal += 20;
           } else {
             alert("😅 No hiciste los clics a tiempo.");
           }
+
           clics = 0;
           document.getElementById("contadorClics").textContent = "Clics: 0";
         }
