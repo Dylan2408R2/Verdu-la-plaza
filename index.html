@@ -2,44 +2,96 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>La Plaza - Verdulería online</title>
+  <title>La Plaza - Verdulería Online</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background: #f7f7f7;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f0fdf4;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    .container {
+      background: white;
+      max-width: 600px;
+      width: 100%;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
     }
     h1 {
-      color: #4CAF50;
+      color: #43a047;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    h2 {
+      color: #2e7d32;
+      margin-top: 30px;
+      font-size: 20px;
+    }
+    label {
+      font-weight: 500;
     }
     input, button {
-      padding: 8px;
-      margin: 5px;
+      padding: 10px;
+      margin: 8px 0;
       font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      width: 100%;
+    }
+    input:focus {
+      outline: none;
+      border-color: #81c784;
+      box-shadow: 0 0 0 2px rgba(129,199,132,0.3);
+    }
+    button {
+      background: #66bb6a;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #4caf50;
+    }
+    .juego {
+      background: #e8f5e9;
+      padding: 16px;
+      border-radius: 12px;
+      margin-top: 15px;
+      border: 1px solid #c8e6c9;
+    }
+    .juego button {
+      margin-top: 10px;
     }
     ul {
+      list-style-type: none;
+      padding-left: 0;
+      margin: 0;
       margin-top: 10px;
     }
     li {
-      margin-bottom: 5px;
+      background: #f1f8e9;
+      padding: 8px 12px;
+      margin-bottom: 6px;
+      border-radius: 8px;
     }
-    .box {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
-      max-width: 600px;
-    }
-    .juego {
-      margin-top: 20px;
-      padding: 15px;
-      border: 2px dashed #aaa;
-      border-radius: 10px;
+    #contadorClics {
+      font-weight: bold;
+      margin-top: 8px;
     }
   </style>
 </head>
 <body>
-  <div class="box">
+  <div class="container">
     <h1>🥬 Verdulería "La Plaza"</h1>
 
     <h2>🎮 Juegos de Descuento</h2>
@@ -59,7 +111,7 @@
       <p id="contadorClics">Clics: 0</p>
     </div>
 
-    <h2>Agregá tus productos al pedido:</h2>
+    <h2>🛒 Agregá tus productos al pedido:</h2>
     <label>Producto:</label>
     <input type="text" id="producto" placeholder="Ej: Manzana">
 
@@ -68,11 +120,19 @@
 
     <button onclick="agregarProducto()">Agregar al pedido</button>
 
-    <h3>🛒 Tu pedido actual:</h3>
+    <h2>🧾 Tu pedido actual:</h2>
     <ul id="lista-pedidos"></ul>
 
-    <button onclick="enviarPedido()">Enviar Pedido</button>
+    <button onclick="enviarPedido()">📩 Enviar Pedido</button>
   </div>
+
+  <!-- Formulario oculto para FormSubmit -->
+  <form id="formularioPedido" action="https://formsubmit.co/TU_EMAIL" method="POST" style="display: none;">
+    <input type="hidden" name="nombre" id="input-nombre">
+    <input type="hidden" name="ubicacion" id="input-ubicacion">
+    <input type="hidden" name="pedido" id="input-pedido">
+    <input type="hidden" name="descuento" id="input-descuento">
+  </form>
 
   <script>
     const pedidos = [];
@@ -89,7 +149,6 @@
         item.textContent = `${cantidad} x ${producto}`;
         document.getElementById("lista-pedidos").appendChild(item);
 
-        // Limpiar inputs
         document.getElementById("producto").value = "";
         document.getElementById("cantidad").value = 1;
       } else {
@@ -103,25 +162,34 @@
         return;
       }
 
-      let resumen = "🧾 Tu pedido:\n";
+      const nombre = prompt("📛 ¿Cuál es tu nombre?");
+      const ubicacion = prompt("📍 ¿Dónde lo llevamos? (ubicación)");
+
+      if (!nombre || !ubicacion) {
+        alert("Faltan datos. No se puede enviar el pedido.");
+        return;
+      }
+
+      let resumen = "";
       pedidos.forEach(p => {
         resumen += `- ${p.cantidad} x ${p.producto}\n`;
       });
 
-      if (descuentoTotal > 0) {
-        resumen += `\n🎁 Descuento aplicado: ${descuentoTotal}%`;
-      }
+      document.getElementById("input-nombre").value = nombre;
+      document.getElementById("input-ubicacion").value = ubicacion;
+      document.getElementById("input-pedido").value = resumen;
+      document.getElementById("input-descuento").value = descuentoTotal + "%";
 
-      alert(resumen + "\n✅ ¡Pedido enviado correctamente!");
+      document.getElementById("formularioPedido").submit();
 
-      // Limpiar todo
+      alert("✅ ¡Pedido enviado!");
+
       pedidos.length = 0;
       document.getElementById("lista-pedidos").innerHTML = "";
       descuentoTotal = 0;
       document.getElementById("contadorClics").textContent = "Clics: 0";
     }
 
-    // Juego 1: Adivina el número
     function jugarAdivina() {
       const numeroSecreto = Math.floor(Math.random() * 5) + 1;
       const intento = prompt("Adiviná un número del 1 al 5:");
@@ -134,7 +202,6 @@
       }
     }
 
-    // Juego 2: Pregunta
     function jugarPregunta() {
       const respuesta = prompt("¿Cuál de estas es una fruta? (Zanahoria, Sandía, Papa)");
 
@@ -146,7 +213,6 @@
       }
     }
 
-    // Juego 3: Clic rápido
     let clics = 0;
     let tiempoRestante = 3;
     let intervalo;
@@ -154,21 +220,19 @@
     function iniciarClic() {
       clics = 0;
       document.getElementById("contadorClics").textContent = "Clics: 0";
+      tiempoRestante = 3;
 
       clearInterval(intervalo);
       intervalo = setInterval(() => {
         tiempoRestante--;
         if (tiempoRestante <= 0) {
           clearInterval(intervalo);
-          tiempoRestante = 3;
-
           if (clics >= 5) {
             alert("💨 ¡Rápido! Ganaste 20% de descuento.");
             descuentoTotal += 20;
           } else {
             alert("😅 No hiciste los clics a tiempo.");
           }
-
           clics = 0;
           document.getElementById("contadorClics").textContent = "Clics: 0";
         }
