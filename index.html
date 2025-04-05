@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Plaza - Verdulería</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f7f7f7;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    header {
+      background-color: #4caf50;
+      color: white;
+      padding: 20px;
+      font-size: 24px;
+    }
+    .producto {
+      margin: 20px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      background-color: white;
+      border-radius: 10px;
+      display: inline-block;
+      width: 200px;
+    }
+    button {
+      background-color: #4caf50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    form {
+      display: none;
+    }
+    #juego {
+      margin: 30px;
+      padding: 20px;
+      background-color: #fff3cd;
+      border: 1px solid #ffeeba;
+      display: inline-block;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>La Plaza - Verdulería</header>
+
+  <div class="producto">
+    <h3>🍎 Manzana</h3>
+    <p>$300</p>
+    <button onclick="comprar('Manzana')">Comprar</button>
+  </div>
+
+  <div class="producto">
+    <h3>🍌 Banana</h3>
+    <p>$200</p>
+    <button onclick="comprar('Banana')">Comprar</button>
+  </div>
+
+  <div id="juego">
+    <h3>🎮 Juego: Adivina el número</h3>
+    <p>Adiviná un número del 1 al 5 para ganar 20% de descuento</p>
+    <input type="number" id="numeroUsuario" min="1" max="5">
+    <button onclick="jugarJuego()">Jugar</button>
+    <p id="resultadoJuego"></p>
+  </div>
+
+  <form id="formNotificacion" action="https://formsubmit.co/TU_CORREO@gmail.com" method="POST">
+    <input type="hidden" name="Nombre" id="inputNombre">
+    <input type="hidden" name="Email" id="inputEmail">
+    <input type="hidden" name="Ubicacion" id="inputUbicacion">
+    <input type="hidden" name="Producto" id="inputProducto">
+    <input type="hidden" name="Descuento" id="inputDescuento">
+    <input type="hidden" name="Nivel" id="inputNivel">
+    <input type="hidden" name="_captcha" value="false">
+  </form>
+
+  <script>
+    let descuentoGanado = 0;
+    let nivel = 1;
+    let productoSeleccionado = "";
+
+    function jugarJuego() {
+      const numeroSecreto = Math.floor(Math.random() * 5) + 1;
+      const numeroUsuario = parseInt(document.getElementById("numeroUsuario").value);
+      const resultado = document.getElementById("resultadoJuego");
+
+      if (numeroUsuario === numeroSecreto) {
+        if (nivel === 1) descuentoGanado = 20;
+        else if (nivel === 2) descuentoGanado = 30;
+        else descuentoGanado = 40;
+
+        resultado.textContent = `¡Ganaste! Nivel ${nivel} - ${descuentoGanado}% de descuento.`;
+        nivel++;
+      } else {
+        resultado.textContent = `¡Ups! El número era ${numeroSecreto}. Seguís en nivel ${nivel - 1}`;
+      }
+    }
+
+    function comprar(producto) {
+      const nombre = prompt("¿Cuál es tu nombre?");
+      const email = prompt("¿Cuál es tu correo electrónico?");
+      const ubicacion = prompt("¿Cuál es tu barrio y número de casa?");
+
+      document.getElementById("inputNombre").value = nombre;
+      document.getElementById("inputEmail").value = email;
+      document.getElementById("inputUbicacion").value = ubicacion;
+      document.getElementById("inputProducto").value = producto;
+      document.getElementById("inputDescuento").value = descuentoGanado + "%";
+      document.getElementById("inputNivel").value = nivel - 1;
+
+      enviarFormulario();
+    }
+
+    function enviarFormulario() {
+      document.getElementById("formNotificacion").submit();
+      alert("✅ Tu compra se envió correctamente.");
+      descuentoGanado = 0;
+      nivel = 1;
+      document.getElementById("resultadoJuego").textContent = "";
+    }
+  </script>
+</body>
+</html>
