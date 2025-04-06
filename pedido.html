@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Pedido</title>
+</head>
+<body>
+  <form id="pedidoForm" action="https://formsubmit.co/tu-correo@gmail.com" method="POST">
+    <input type="hidden" name="_subject" value="Nuevo pedido desde Roblox">
+    <input type="hidden" name="pedido" id="pedido">
+  </form>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const nombre = params.get("nombre") || "Sin nombre";
+    const ubicacion = params.get("ubicacion") || "Sin ubicación";
+
+    document.getElementById("pedido").value = `Nombre: ${nombre}\nUbicación: ${ubicacion}`;
+    document.getElementById("pedidoForm").submit();
+  </script>
+</body>
+</html>
